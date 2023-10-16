@@ -1,0 +1,63 @@
+﻿@page "/"
+@using GenericsExample.Classes;
+@using GenericsExample.Interfaces;
+@inject ReflectionGenericList data
+
+<PageTitle>Generics</PageTitle>
+
+<h1>Generics</h1>
+
+@code{
+    CustomGenericList<IAnimal> genericAnimals = new();
+    CustomGenericList<IProduct> genericProducts = new();
+
+    ExtendedGenericList<IAnimal> extendedAnimals = new();
+    ExtendedGenericList<IProduct> extendedProducts = new();
+
+    protected override void OnInitialized()
+    {
+        /*** Custom Generic List ***/
+        LoadCustomGenericLists();
+        var cat = genericAnimals.Single(a => a.Name == "Blacky");
+        var cats = genericAnimals.Get(a => a.Name.StartsWith("Sp"));
+
+        var prod = genericProducts.Single(p => p.Id == 2);
+        var prods = genericProducts.Get(p => p.Title.Contains("TV"));
+
+        /*** Extended Generic List ***/
+        LoadExtendedGenericLists();
+        var ecat = extendedAnimals.Single(a => a.Name == "Blacky");
+        var ecats = extendedAnimals.Get(a => a.Name.StartsWith("Sp"));
+
+        var eprod = extendedProducts.Single(p => p.Id == 2);
+        var eprods = extendedProducts.Get(p => p.Title.Contains("TV"));
+
+        /*** Custom Generic Reflection List ***/
+        var animals = data.Get<IAnimal>(a => a.Name.StartsWith("Sp"));
+        var products = data.Get<IProduct>(p => p.Title.Contains("TV"));
+    }
+
+    void LoadCustomGenericLists()
+    {
+        genericAnimals.Add(new Animal { Id = 1, Name = "Spotty" });
+        genericAnimals.Add(new Animal { Id = 2, Name = "Blacky" });
+        genericAnimals.Add(new Animal { Id = 3, Name = "Spinner" });
+
+        genericProducts.Add(new Product { Id = 1, Title = "Panasonic TV" });
+        genericProducts.Add(new Product { Id = 2, Title = "Radio" });
+        genericProducts.Add(new Product { Id = 3, Title = "Sony TV" });
+    }
+
+    void LoadExtendedGenericLists()
+    {
+        extendedAnimals.Add(new Animal { Id = 1, Name = "Spotty" });
+        extendedAnimals.Add(new Animal { Id = 2, Name = "Blacky" });
+        extendedAnimals.Add(new Animal { Id = 3, Name = "Spinner" });
+
+        extendedProducts.Add(new Product { Id = 1, Title = "Panasonic TV" });
+        extendedProducts.Add(new Product { Id = 2, Title = "Radio" });
+        extendedProducts.Add(new Product { Id = 3, Title = "Sony TV" });
+    }
+
+}
+
